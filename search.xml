@@ -4,26 +4,38 @@
   
     
     <entry>
-      <title>测试github远端</title>
-      <link href="/post/1043.html"/>
-      <url>/post/1043.html</url>
+      <title>第二篇测试文章</title>
+      <link href="/post/45351.html"/>
+      <url>/post/45351.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 测试 </tag>
+            
+        </tags>
       
     </entry>
     
     
     
     <entry>
-      <title>我的第一篇博客</title>
-      <link href="/post/63785.html"/>
-      <url>/post/63785.html</url>
+      <title>第一篇测试文章</title>
+      <link href="/post/54403.html"/>
+      <url>/post/54403.html</url>
       
-        <content type="html"><![CDATA[<h2 id="第一章"><a href="#第一章" class="headerlink" title="第一章"></a>第一章</h2><p>内容</p><hr><h2 id="what-can-i-say"><a href="#what-can-i-say" class="headerlink" title="what can i say"></a>what can i say</h2><p>manba out</p><hr>]]></content>
+        <content type="html"><![CDATA[]]></content>
       
       
+      
+        <tags>
+            
+            <tag> 测试 </tag>
+            
+        </tags>
       
     </entry>
     
@@ -33,20 +45,9 @@
     
     
     <entry>
-      <title>分类</title>
-      <link href="/categories/index.html"/>
-      <url>/categories/index.html</url>
-      
-        <content type="html"><![CDATA[]]></content>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>生活</title>
-      <link href="/life/index.html"/>
-      <url>/life/index.html</url>
+      <title>关于</title>
+      <link href="/about/index.html"/>
+      <url>/about/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -66,9 +67,9 @@
     
     
     <entry>
-      <title>动漫</title>
-      <link href="/anime/index.html"/>
-      <url>/anime/index.html</url>
+      <title>生活</title>
+      <link href="/life/index.html"/>
+      <url>/life/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -77,9 +78,9 @@
     
     
     <entry>
-      <title>关于</title>
-      <link href="/about/index.html"/>
-      <url>/about/index.html</url>
+      <title>分类</title>
+      <link href="/categories/index.html"/>
+      <url>/categories/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -88,9 +89,9 @@
     
     
     <entry>
-      <title>音乐</title>
-      <link href="/music/index.html"/>
-      <url>/music/index.html</url>
+      <title>标签</title>
+      <link href="/tags/index.html"/>
+      <url>/tags/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       
@@ -110,6 +111,17 @@
     
     
     <entry>
+      <title>动漫</title>
+      <link href="/anime/index.html"/>
+      <url>/anime/index.html</url>
+      
+        <content type="html"><![CDATA[]]></content>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>编程</title>
       <link href="/program/index.html"/>
       <url>/program/index.html</url>
@@ -121,9 +133,9 @@
     
     
     <entry>
-      <title>标签</title>
-      <link href="/tags/index.html"/>
-      <url>/tags/index.html</url>
+      <title>音乐</title>
+      <link href="/music/index.html"/>
+      <url>/music/index.html</url>
       
         <content type="html"><![CDATA[]]></content>
       

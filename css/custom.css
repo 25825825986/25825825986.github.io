@@ -6,12 +6,13 @@
   }
   
   /* 首页文章卡片 */
-  #recent-posts > .recent-post-item {
-    background: var(--trans-light);
+
+  #recent-posts .recent-post-item {
+    background: var(--trans-light);  
     backdrop-filter: var(--backdrop-filter);
     border-radius: 25px;
     border: var(--border-style);
-  }
+    }
   
   /* 首页侧栏卡片 */
   #aside-content .card-widget {
@@ -42,7 +43,7 @@
   }
   
   /* 夜间模式遮罩 */
-  [data-theme="dark"] #recent-posts > .recent-post-item,
+  [data-theme="dark"] #recent-posts .recent-post-item,
   [data-theme="dark"] #aside-content .card-widget,
   [data-theme="dark"] div#post,
   [data-theme="dark"] div#archive,
