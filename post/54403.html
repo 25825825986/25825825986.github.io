@@ -1,0 +1,317 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>关于本站：博客介绍与搭建方法 | 风月酌酒</title><meta name="author" content="风月酌酒"><meta name="copyright" content="风月酌酒"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="2025 年 4 月建起来，中间空了十个月。这个站是什么，为什么这么搭，以及几个真正卡住我的地方。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="关于本站：博客介绍与搭建方法">
+<meta property="og:url" content="https://25825825986.github.io/post/54403.html">
+<meta property="og:site_name" content="风月酌酒">
+<meta property="og:description" content="2025 年 4 月建起来，中间空了十个月。这个站是什么，为什么这么搭，以及几个真正卡住我的地方。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://25825825986.github.io/img/cover-2.webp">
+<meta property="article:published_time" content="2026-10-28T22:10:00.000Z">
+<meta property="article:modified_time" content="2026-10-28T22:10:00.000Z">
+<meta property="article:author" content="风月酌酒">
+<meta property="article:tag" content="Hexo">
+<meta property="article:tag" content="建站笔记">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://25825825986.github.io/img/cover-2.webp"><script type="application/ld+json">{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "关于本站：博客介绍与搭建方法",
+  "url": "https://25825825986.github.io/post/54403.html",
+  "image": "https://25825825986.github.io/img/cover-2.webp",
+  "datePublished": "2026-10-28T22:10:00.000Z",
+  "dateModified": "2026-10-28T22:10:00.000Z",
+  "author": [
+    {
+      "@type": "Person",
+      "name": "风月酌酒",
+      "url": "https://25825825986.github.io"
+    }
+  ]
+}</script><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="https://25825825986.github.io/post/54403.html"><link rel="preconnect" href="//cdn.jsdelivr.net"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free/css/all.min.css"><script>
+    (() => {
+      
+    const saveToLocal = {
+      set: (key, value, ttl) => {
+        try {
+          const data = { value }
+
+          if (ttl != null) {
+            data.expiry = Date.now() + ttl * 86400000
+          }
+
+          localStorage.setItem(key, JSON.stringify(data))
+        } catch (e) {
+          console.error(e)
+        }
+      },
+      get: key => {
+        const itemStr = localStorage.getItem(key)
+        if (!itemStr) return
+
+        try {
+          const data = JSON.parse(itemStr)
+
+          if (data.expiry && Date.now() > data.expiry) {
+            localStorage.removeItem(key)
+            return
+          }
+
+          return data.value
+        } catch {
+          localStorage.removeItem(key)
+        }
+      }
+    }
+
+    const scriptCache = new Map()
+    const cssCache = new Map()
+    window.btf = {
+      saveToLocal,
+      getScript: (url, attr = {}) => {
+        if (scriptCache.has(url)) {
+          return scriptCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const script = document.createElement('script')
+
+          script.src = url
+          script.async = true
+
+          for (const key in attr) {
+            script.setAttribute(key, attr[key])
+          }
+
+          script.onload = resolve
+          script.onerror = reject
+
+          document.head.appendChild(script)
+        })
+
+        scriptCache.set(url, promise)
+
+        return promise
+      },
+      getCSS: (url, id) => {
+        if (cssCache.has(url)) {
+          return cssCache.get(url)
+        }
+
+        const promise = new Promise((resolve, reject) => {
+          const link = document.createElement('link')
+
+          link.rel = 'stylesheet'
+          link.href = url
+
+          if (id) {
+            link.id = id
+          }
+
+          link.onload = resolve
+          link.onerror = reject
+
+          document.head.appendChild(link)
+        })
+
+        cssCache.set(url, promise)
+
+        return promise
+      },
+      addGlobalFn: (key, fn, name = false, parent = window) => {
+        if (!false && key.startsWith('pjax')) return
+        const globalFn = parent.globalFn || {}
+        globalFn[key] = globalFn[key] || {}
+        globalFn[key][name || Object.keys(globalFn[key]).length] = fn
+        parent.globalFn = globalFn
+      }
+    }
+  
+      
+      const metaThemeColor = document.querySelector('meta[name="theme-color"]')
+      const activateDarkMode = () => {
+        document.documentElement.dataset.theme = 'dark'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#0d0d0d')
+        }
+      }
+      const activateLightMode = () => {
+        document.documentElement.dataset.theme = 'light'
+        if (metaThemeColor !== null) {
+          metaThemeColor.setAttribute('content', '#ffffff')
+        }
+      }
+
+      btf.activateDarkMode = activateDarkMode
+      btf.activateLightMode = activateLightMode
+
+      const theme = saveToLocal.get('theme')
+    
+          theme === 'dark' ? activateDarkMode() : theme === 'light' ? activateLightMode() : null
+        
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        document.documentElement.classList.toggle('hide-aside', asideStatus === 'hide')
+      }
+    
+      
+    const detectApple = () => {
+      if (/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)) {
+        document.documentElement.classList.add('apple')
+      }
+    }
+    detectApple()
+  
+    })()
+  </script><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":false,"top_n_per_article":1,"unescape":false,"pagination":{"enable":false,"hitsPerPage":8},"languages":{"hits_empty":"未找到符合您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230,"highlightFullpage":false,"highlightMacStyle":true},
+  copy: {
+    success: '复制成功',
+    error: '复制失败',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: false,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'null',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdn.jsdelivr.net/npm/@egjs/infinitegrid/dist/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyloadPlugin: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: '关于本站：博客介绍与搭建方法',
+  isHighlightShrink: false,
+  isToc: true,
+  pageType: 'post'
+}</script><link rel="preload" as="image" href="/img/background-light.webp" fetchpriority="low"><link rel="stylesheet" href="/css/custom.css"><link rel="stylesheet" href="/css/effects.css"><meta name="generator" content="Hexo 8.1.2"></head><body><div class="bg-animation" id="web_bg" style="background-image: url(/img/background-light.webp);"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img text-center"><img src="/img/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="site-data text-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/anime/"><i class="fa-fw fas fa-tv"></i><span> 动漫</span></a></li><li><a class="site-page child" href="/program"><i class="fa-fw fas fa-code"></i><span> 编程</span></a></li><li><a class="site-page child" href="/life/"><i class="fa-fw fas fa-leaf"></i><span> 生活</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header" style="background-image: url(/img/cover-2.webp);"><nav id="nav"><span id="blog-info"><a class="nav-site-title" href="/"><img class="site-icon" src="/img/logo-mark.webp" alt="Logo"><span class="site-name">风月酌酒</span></a><a class="nav-page-title" href="/"><span class="site-name">关于本站：博客介绍与搭建方法</span><span class="site-name"><i class="fa-solid fa-circle-arrow-left"></i><span>  返回首页</span></span></a></span><div id="menus"><div id="search-button"><span class="site-page social-icon search"><i class="fas fa-search fa-fw"></i><span> 搜索</span></span></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 首页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 归档</span></a></div><div class="menus_item"><a class="site-page" href="/tags/"><i class="fa-fw fas fa-tags"></i><span> 标签</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><span class="site-page group"><i class="fa-fw fas fa-list"></i><span> 列表</span><i class="fas fa-chevron-down"></i></span><ul class="menus_item_child"><li><a class="site-page child" href="/game/"><i class="fa-fw fas fa-gamepad"></i><span> 游戏</span></a></li><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/anime/"><i class="fa-fw fas fa-tv"></i><span> 动漫</span></a></li><li><a class="site-page child" href="/program"><i class="fa-fw fas fa-code"></i><span> 编程</span></a></li><li><a class="site-page child" href="/life/"><i class="fa-fw fas fa-leaf"></i><span> 生活</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div></div><div id="toggle-menu"><span class="site-page"><i class="fas fa-bars fa-fw"></i></span></div></div></nav><div id="post-info"><h1 class="post-title">关于本站：博客介绍与搭建方法</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-10-28T22:10:00.000Z" title="发表于 2026-10-28 22:10:00">2026-10-28</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-10-28T22:10:00.000Z" title="更新于 2026-10-28 22:10:00">2026-10-28</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E5%8D%9A%E5%AE%A2%E6%90%AD%E5%BB%BA%E5%88%86%E4%BA%AB/">博客搭建分享</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">总字数:</span><span class="word-count">1580</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>7 分钟</span></span></div></div></div></header><main class="layout" id="content-inner"><div id="post"><article class="container post-content" id="article-container"><p>2025 年 4 月的一个晚上，我把 Hexo 跑起来，发了第一篇日志，然后就把这个文件夹忘了。</p>
+<p>再打开是 2026 年 3 月。<code>npm install</code> 直接报错，主题停在十个月前的版本，<code>hexo s</code> 起来一片空白。断断续续修到 10 月，才算能看。</p>
+<p>现在这个站是修完之后的样子。</p>
+<span id="more"></span>
+
+<h2 id="这个站"><a href="#这个站" class="headerlink" title="这个站"></a>这个站</h2><p>站名「风月酌酒」，看风景，喝点酒，顺便写点东西。起名的时候没想太多，就觉得这四个字念着顺。</p>
+<p>内容分四块。</p>
+<ul>
+<li><strong>编程</strong>，学习笔记、踩坑记录、工具折腾</li>
+<li><strong>动漫</strong>，看过的番，偶尔写点感想</li>
+<li><strong>游戏</strong>，玩过的东西</li>
+<li><strong>生活</strong>，没什么主题的随笔</li>
+</ul>
+<p>编程会占大头，因为我大部分时间在跟代码较劲。另外三块几个月才动一次，我不打算硬凑。</p>
+<p>有人说这种站叫数字花园。我更愿意把它当记事本，半年后忘了某个配置怎么改，回来翻一翻。顺带对别人有用，那算赚了。</p>
+<h2 id="技术选型"><a href="#技术选型" class="headerlink" title="技术选型"></a>技术选型</h2><table>
+<thead>
+<tr>
+<th>层</th>
+<th>选择</th>
+<th>为什么是它</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>生成器</td>
+<td>Hexo 8.1.2</td>
+<td>纯静态，没有数据库和后台。写博客已经够费劲，不想再维护一台服务器</td>
+</tr>
+<tr>
+<td>主题</td>
+<td>Butterfly 5.7.1</td>
+<td>卡片式布局，功能齐，社区还在更新</td>
+</tr>
+<tr>
+<td>部署</td>
+<td>GitHub Pages + Actions</td>
+<td>推代码就发布，不用买服务器，也不用管证书</td>
+</tr>
+<tr>
+<td>搜索</td>
+<td>hexo-generator-search</td>
+<td>本地搜索，不依赖第三方服务</td>
+</tr>
+<tr>
+<td>评论</td>
+<td>暂未启用</td>
+<td>先用 GitHub 和邮箱联系，等人多了再说</td>
+</tr>
+</tbody></table>
+<p>静态站的好处就一条，不用管服务器。代价是没有后台，写文章得在本地写好再推上去。我本来也是在本地的编辑器里写，这个代价可以接受。</p>
+<h2 id="从零搭起来"><a href="#从零搭起来" class="headerlink" title="从零搭起来"></a>从零搭起来</h2><h3 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">node -v          <span class="comment"># 建议 20 或 22 的 LTS</span></span><br><span class="line">git --version</span><br></pre></td></tr></table></figure>
+
+<p>Node 用 LTS。Hexo 8 要求 20.19 以上，但别去追 Current 版本，偶尔会撞上依赖不兼容。</p>
+<h3 id="初始化"><a href="#初始化" class="headerlink" title="初始化"></a>初始化</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">npm install -g hexo-cli</span><br><span class="line">hexo init blog</span><br><span class="line"><span class="built_in">cd</span> blog</span><br><span class="line">npm install</span><br></pre></td></tr></table></figure>
+
+<h3 id="装主题"><a href="#装主题" class="headerlink" title="装主题"></a>装主题</h3><p>Butterfly 用 submodule 引入，主题能独立更新，也不会和自己的配置搅在一起。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git submodule add https://github.com/jerryc127/hexo-theme-butterfly.git themes/butterfly</span><br><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+
+<p>然后改两处。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _config.yml</span></span><br><span class="line"><span class="attr">theme:</span> <span class="string">butterfly</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 把主题自带配置复制到根目录，以后只改根目录这份</span></span><br><span class="line"><span class="built_in">cp</span> themes/butterfly/_config.yml _config.butterfly.yml</span><br></pre></td></tr></table></figure>
+
+<p>这一步别省。<code>_config.butterfly.yml</code> 放在根目录，主题目录保持干净，以后 <code>git submodule update</code> 拉新版本，配置不会丢。</p>
+<h3 id="固定链接"><a href="#固定链接" class="headerlink" title="固定链接"></a>固定链接</h3><p>Hexo 默认拿标题生成 URL。标题是会改的，链接不该跟着改，不然外面引用全断。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-abbrlink --save</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _config.yml</span></span><br><span class="line"><span class="attr">permalink:</span> <span class="string">post/:abbrlink.html</span></span><br><span class="line"><span class="attr">abbrlink:</span></span><br><span class="line">  <span class="attr">alg:</span> <span class="string">crc32</span>   <span class="comment"># crc16 或 crc32</span></span><br><span class="line">  <span class="attr">rep:</span> <span class="string">hex</span>     <span class="comment"># dec 或 hex</span></span><br></pre></td></tr></table></figure>
+
+<p><code>abbrlink</code> 在第一次生成时算出来就定死了，之后改标题、改分类，链接都不动。已经发出去的文章，别去动这个值。</p>
+<h3 id="本地搜索"><a href="#本地搜索" class="headerlink" title="本地搜索"></a>本地搜索</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install hexo-generator-search --save</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _config.yml</span></span><br><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">path:</span> <span class="string">search.xml</span></span><br><span class="line">  <span class="attr">field:</span> <span class="string">all</span></span><br><span class="line">  <span class="attr">content:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># _config.butterfly.yml</span></span><br><span class="line"><span class="attr">search:</span></span><br><span class="line">  <span class="attr">use:</span> <span class="string">local_search</span></span><br><span class="line">  <span class="attr">placeholder:</span> <span class="string">搜索文章</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="预览"><a href="#预览" class="headerlink" title="预览"></a>预览</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">npx hexo clean &amp;&amp; npx hexo generate</span><br><span class="line">npx hexo server -p 4000</span><br></pre></td></tr></table></figure>
+
+<p>打开 <a target="_blank" rel="noopener" href="http://localhost:4000/">http://localhost:4000</a>。<code>hexo server</code> 会盯着文件改动，改完自动重新生成。</p>
+<h3 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h3><p>站点分两个仓库。源码仓库放 Hexo 源文件，产物仓库（<code>&lt;用户名&gt;.github.io</code>）放构建出来的 <code>public/</code>，Pages 从后者读。</p>
+<p>中间用 GitHub Actions 串起来。<code>.github/workflows/deploy-pages.yml</code> 大致四步。</p>
+<ol>
+<li><code>actions/checkout</code> 拉源码，记得带 <code>submodules: recursive</code>，否则主题目录是空的</li>
+<li><code>actions/setup-node</code> 装 Node</li>
+<li><code>npm ci &amp;&amp; npm run build</code></li>
+<li>用 Deploy Key 把 <code>public/</code> 推到产物仓库</li>
+</ol>
+<p>认证这块一开始用的是 PAT，token 的作用域怎么配都不对，push 一直被拒。换成 Deploy Key 之后一次配完，再没管过。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ssh-keygen -t ed25519 -C <span class="string">&quot;deploy-key@example.github.io&quot;</span> -f .deploy-key/id_ed25519 -N <span class="string">&quot;&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>公钥贴到产物仓库的 Settings → Deploy keys，<strong>记得勾 Allow write access</strong>。私钥贴到源码仓库的 Settings → Secrets → Actions，命名 <code>DEPLOY_KEY</code>。</p>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">blog/</span><br><span class="line">├── _config.yml              # Hexo 主配置</span><br><span class="line">├── _config.butterfly.yml    # 主题配置（和主题源码分开）</span><br><span class="line">├── source/</span><br><span class="line">│   ├── _posts/              # 文章</span><br><span class="line">│   ├── _data/link.yml       # 友链</span><br><span class="line">│   ├── css/custom.css       # 自定义样式</span><br><span class="line">│   └── js/universe.js       # 夜间星空特效</span><br><span class="line">├── themes/butterfly/        # 主题（git submodule）</span><br><span class="line">├── scripts/                 # 自定义 Hexo 脚本</span><br><span class="line">└── .github/workflows/       # 自动部署</span><br></pre></td></tr></table></figure>
+
+<h2 id="自定义样式放哪"><a href="#自定义样式放哪" class="headerlink" title="自定义样式放哪"></a>自定义样式放哪</h2><p>主题是 submodule，直接改里面的文件，下次更新就没了。样式一律写在 <code>source/css/custom.css</code>，通过 <code>_config.butterfly.yml</code> 的 <code>inject.head</code> 注进去。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">inject:</span></span><br><span class="line">  <span class="attr">head:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">&lt;link</span> <span class="string">rel=&quot;stylesheet&quot;</span> <span class="string">href=&quot;/css/custom.css&quot;&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p>它排在主题的 <code>index.css</code> 后面，同优先级下能盖住主题样式，升级主题也不会丢改动。</p>
+<p>夜间星空同理。<code>source/js/universe.js</code> 是个 canvas 粒子脚本，只在 <code>data-theme=&quot;dark&quot;</code> 时画。2025 年 5 月刚加的时候没处理切回白天的情况，屏幕上留着一层星星擦不掉，后来补了清空画布才正常。</p>
+<h2 id="几个坑"><a href="#几个坑" class="headerlink" title="几个坑"></a>几个坑</h2><h3 id="克隆下来页面全白"><a href="#克隆下来页面全白" class="headerlink" title="克隆下来页面全白"></a>克隆下来页面全白</h3><p>九成是主题没拉下来。<code>themes/butterfly</code> 是 submodule，普通 <code>git clone</code> 不会自动拉。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">git submodule update --init --recursive</span><br></pre></td></tr></table></figure>
+
+<h3 id="样式或图片-404"><a href="#样式或图片-404" class="headerlink" title="样式或图片 404"></a>样式或图片 404</h3><p>先看 <code>_config.yml</code> 里的 <code>url</code>。站点如果挂在子路径下，还要确认 <code>root</code>，不然所有绝对路径都会错位。</p>
+<h3 id="改了标题链接就变了"><a href="#改了标题链接就变了" class="headerlink" title="改了标题链接就变了"></a>改了标题链接就变了</h3><p>说明没开 <code>abbrlink</code>。开了之后链接由 <code>abbrlink</code> 字段决定，和标题脱钩。</p>
+<h3 id="文章页空白，生成的文件是-0-字节"><a href="#文章页空白，生成的文件是-0-字节" class="headerlink" title="文章页空白，生成的文件是 0 字节"></a>文章页空白，生成的文件是 0 字节</h3><p>这个坑花的时间比前面所有加起来都多。根因是 <code>hexo-util</code> 的 <code>Pattern</code> 没做首尾锚定，把主题的样式表当成了布局，渲染文章时拿 stylus 文件当 pug 模板用。完整排查过程单独写了一篇，<a href="/post/15076.html">在这里</a>。</p>
+<p>搭这个站花了三个晚上。写文章的时间是它的几十倍，而且大部分时候什么都没写出来。</p>
+<p>2025 年 5 月更新完主题，这里空了十个月。每次打开编辑器，都觉得没什么值得写的。</p>
+<p>后来发现能写的东西都在过程里。那个 0 字节的 bug 就是，不记下来，明年我肯定想不起 <code>Pattern</code> 是怎么回事。</p>
+<p>剩下的坑还挂在<a href="/post/45351.html">更新日志</a>里，慢慢填。</p>
+</article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta"><i class="fas fa-circle-user fa-fw"></i>文章作者: </span><span class="post-copyright-info"><a href="https://25825825986.github.io">风月酌酒</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta"><i class="fas fa-square-arrow-up-right fa-fw"></i>文章链接: </span><span class="post-copyright-info"><a href="https://25825825986.github.io/post/54403.html">https://25825825986.github.io/post/54403.html</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta"><i class="fas fa-circle-exclamation fa-fw"></i>版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来源 <a href="https://25825825986.github.io" target="_blank">风月酌酒</a>！</span></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E5%BB%BA%E7%AB%99%E7%AC%94%E8%AE%B0/">建站笔记</a><a class="post-meta__tags" href="/tags/Hexo/">Hexo</a></div><div class="post-share"><div class="social-share" data-image="/img/cover-2.webp" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/css/share.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/butterfly-extsrc/sharejs/dist/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><a class="pagination-related" href="/post/15076.html" title="文章页渲染成 0 字节：一个没锚定的正则"><img class="cover" src="/img/cover-3.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of previous post"><div class="info"><div class="info-1"><div class="info-item-1">上一篇</div><div class="info-item-2">文章页渲染成 0 字节：一个没锚定的正则</div></div><div class="info-2"><div class="info-item-1">10 月 28 日，我给站点调完样式，跑了一遍 hexo g。输出一切正常，37 个文件全部生成，没有一条报错。 打开浏览器，文章页是白的。   现象hexo g 的日志是这样的。 123INFO  Generated: post/54403.htmlINFO  Generated: post/45351.htmlINFO  37 files generated in 930 ms  但页面不是样式错乱，是整页空白。view-source 看源码，什么都没有。 123$ ls -l public/post/*.html-rw-r--r--  1 lucas  staff      0 Oct 28 23:41 45351.html-rw-r--r--  1 lucas  staff      0 Oct 28 23:41 54403.html  两个文件都是 0 字节。 奇怪的是首页、归档页、标签页全都正常，只有文章详情页是空的。首页能出来，说明 markdown 渲染没问题，主题资源没缺，_config.yml 也没写错。问题被压缩到了 post 这一个布局上。 先排掉几个可能...</div></div></div></a><a class="pagination-related" href="/post/45351.html" title="博客更新日志"><img class="cover" src="/img/cover-1.webp" onerror="onerror=null;src='/img/404.jpg'" alt="cover of next post"><div class="info text-right"><div class="info-1"><div class="info-item-1">下一篇</div><div class="info-item-2">博客更新日志</div></div><div class="info-2"><div class="info-item-1">记录这个站点的变更历史。按时间倒序，新的在最上面。   2026-10-28修复  文章页渲染为空、生成的文件是 0 字节。原因是 hexo-util 的 Pattern 未做首尾锚定，把 source/css/_layout/*.styl 误判成主题布局，覆盖了 post.pug。改为在 scripts/fix-theme-views.js 里生成前清理误注册的样式视图 导航栏左上角圆形头像被上下裁切。#blog-info 继承了 .limit-one-line 的 overflow: hidden，把 36px 头像连同描边一起切掉了 右下角悬浮按钮看不清。图标是纯白、底色又是 78% 半透明白，叠在白色卡片上几乎隐形  优化  悬浮按钮改为接近实白底 + 主色图标，补描边和阴影；容器 opacity 从 0.8 提到 1，暗色模式单独配色  内容  新增「博客搭建分享」分类 两篇占位文章替换为正式内容：《关于本站：博客介绍与搭建方法》《博客更新日志》  2026-10-13 部署认证从 PAT 改为 Deploy Key，绕开 token 作用域问题 工作流在部署前增加 S...</div></div></div></a></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><a class="pagination-related" href="/post/45351.html" title="博客更新日志"><img class="cover" src="/img/cover-1.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2025-04-27</div><div class="info-item-2">博客更新日志</div></div><div class="info-2"><div class="info-item-1">记录这个站点的变更历史。按时间倒序，新的在最上面。   2026-10-28修复  文章页渲染为空、生成的文件是 0 字节。原因是 hexo-util 的 Pattern 未做首尾锚定，把 source/css/_layout/*.styl 误判成主题布局，覆盖了 post.pug。改为在 scripts/fix-theme-views.js 里生成前清理误注册的样式视图 导航栏左上角圆形头像被上下裁切。#blog-info 继承了 .limit-one-line 的 overflow: hidden，把 36px 头像连同描边一起切掉了 右下角悬浮按钮看不清。图标是纯白、底色又是 78% 半透明白，叠在白色卡片上几乎隐形  优化  悬浮按钮改为接近实白底 + 主色图标，补描边和阴影；容器 opacity 从 0.8 提到 1，暗色模式单独配色  内容  新增「博客搭建分享」分类 两篇占位文章替换为正式内容：《关于本站：博客介绍与搭建方法》《博客更新日志》  2026-10-13 部署认证从 PAT 改为 Deploy Key，绕开 token 作用域问题 工作流在部署前增加 S...</div></div></div></a><a class="pagination-related" href="/post/15076.html" title="文章页渲染成 0 字节：一个没锚定的正则"><img class="cover" src="/img/cover-3.webp" alt="cover"><div class="info text-center"><div class="info-1"><div class="info-item-1"><i class="far fa-calendar-alt fa-fw"></i> 2026-10-28</div><div class="info-item-2">文章页渲染成 0 字节：一个没锚定的正则</div></div><div class="info-2"><div class="info-item-1">10 月 28 日，我给站点调完样式，跑了一遍 hexo g。输出一切正常，37 个文件全部生成，没有一条报错。 打开浏览器，文章页是白的。   现象hexo g 的日志是这样的。 123INFO  Generated: post/54403.htmlINFO  Generated: post/45351.htmlINFO  37 files generated in 930 ms  但页面不是样式错乱，是整页空白。view-source 看源码，什么都没有。 123$ ls -l public/post/*.html-rw-r--r--  1 lucas  staff      0 Oct 28 23:41 45351.html-rw-r--r--  1 lucas  staff      0 Oct 28 23:41 54403.html  两个文件都是 0 字节。 奇怪的是首页、归档页、标签页全都正常，只有文章详情页是空的。首页能出来，说明 markdown 渲染没问题，主题资源没缺，_config.yml 也没写错。问题被压缩到了 post 这一个布局上。 先排掉几个可能...</div></div></div></a></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info text-center"><div class="avatar-img"><img src="/img/avatar.webp" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info-name">风月酌酒</div><div class="author-info-description">一个热爱动漫的编程菜鸟</div><div class="site-data"><a href="/archives/"><div class="headline">文章</div><div class="length-num">3</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">3</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">1</div></a></div><div class="card-info-social-icons"><a class="social-icon" href="https://github.com/25825825986" target="_blank" title="Github"><i class="icon-github" style="color: #24292e;"></i></a><a class="social-icon" href="mailto:153299005@qq.com" target="_blank" title="Email"><i class="fas fa-envelope" style="color: #4a7dbe;"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">欢迎来到我的博客！</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%BF%99%E4%B8%AA%E7%AB%99"><span class="toc-number">1.</span> <span class="toc-text">这个站</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%8A%80%E6%9C%AF%E9%80%89%E5%9E%8B"><span class="toc-number">2.</span> <span class="toc-text">技术选型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%8E%E9%9B%B6%E6%90%AD%E8%B5%B7%E6%9D%A5"><span class="toc-number">3.</span> <span class="toc-text">从零搭起来</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%8E%AF%E5%A2%83"><span class="toc-number">3.1.</span> <span class="toc-text">环境</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9D%E5%A7%8B%E5%8C%96"><span class="toc-number">3.2.</span> <span class="toc-text">初始化</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A3%85%E4%B8%BB%E9%A2%98"><span class="toc-number">3.3.</span> <span class="toc-text">装主题</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%BA%E5%AE%9A%E9%93%BE%E6%8E%A5"><span class="toc-number">3.4.</span> <span class="toc-text">固定链接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9C%AC%E5%9C%B0%E6%90%9C%E7%B4%A2"><span class="toc-number">3.5.</span> <span class="toc-text">本地搜索</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%A2%84%E8%A7%88"><span class="toc-number">3.6.</span> <span class="toc-text">预览</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%83%A8%E7%BD%B2"><span class="toc-number">3.7.</span> <span class="toc-text">部署</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%9B%AE%E5%BD%95%E7%BB%93%E6%9E%84"><span class="toc-number">4.</span> <span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89%E6%A0%B7%E5%BC%8F%E6%94%BE%E5%93%AA"><span class="toc-number">5.</span> <span class="toc-text">自定义样式放哪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%87%A0%E4%B8%AA%E5%9D%91"><span class="toc-number">6.</span> <span class="toc-text">几个坑</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%85%8B%E9%9A%86%E4%B8%8B%E6%9D%A5%E9%A1%B5%E9%9D%A2%E5%85%A8%E7%99%BD"><span class="toc-number">6.1.</span> <span class="toc-text">克隆下来页面全白</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%A0%B7%E5%BC%8F%E6%88%96%E5%9B%BE%E7%89%87-404"><span class="toc-number">6.2.</span> <span class="toc-text">样式或图片 404</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%94%B9%E4%BA%86%E6%A0%87%E9%A2%98%E9%93%BE%E6%8E%A5%E5%B0%B1%E5%8F%98%E4%BA%86"><span class="toc-number">6.3.</span> <span class="toc-text">改了标题链接就变了</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%96%87%E7%AB%A0%E9%A1%B5%E7%A9%BA%E7%99%BD%EF%BC%8C%E7%94%9F%E6%88%90%E7%9A%84%E6%96%87%E4%BB%B6%E6%98%AF-0-%E5%AD%97%E8%8A%82"><span class="toc-number">6.4.</span> <span class="toc-text">文章页空白，生成的文件是 0 字节</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item"><a class="thumbnail" href="/post/15076.html" title="文章页渲染成 0 字节：一个没锚定的正则"><img src="/img/cover-3.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="文章页渲染成 0 字节：一个没锚定的正则"/></a><div class="content"><a class="title" href="/post/15076.html" title="文章页渲染成 0 字节：一个没锚定的正则">文章页渲染成 0 字节：一个没锚定的正则</a><time datetime="2026-10-28T23:40:00.000Z" title="发表于 2026-10-28 23:40:00">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/54403.html" title="关于本站：博客介绍与搭建方法"><img src="/img/cover-2.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="关于本站：博客介绍与搭建方法"/></a><div class="content"><a class="title" href="/post/54403.html" title="关于本站：博客介绍与搭建方法">关于本站：博客介绍与搭建方法</a><time datetime="2026-10-28T22:10:00.000Z" title="发表于 2026-10-28 22:10:00">2026-10-28</time></div></div><div class="aside-list-item"><a class="thumbnail" href="/post/45351.html" title="博客更新日志"><img src="/img/cover-1.webp" onerror="this.onerror=null;this.src='/img/404.jpg'" alt="博客更新日志"/></a><div class="content"><a class="title" href="/post/45351.html" title="博客更新日志">博客更新日志</a><time datetime="2025-04-27T21:55:40.000Z" title="发表于 2025-04-27 21:55:40">2025-04-27</time></div></div></div></div></div></div></main><footer id="footer" style="background: transparent;"><div class="footer-other"><div class="footer-copyright"><span class="copyright">&copy;&nbsp;2025 - 2026 By 风月酌酒</span><span class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo 8.1.2</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly 5.7.1.260810</a></span></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><button id="darkmode" type="button" title="日间和夜间模式切换"><i class="fas fa-adjust"></i></button><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><div class="js-pjax"></div><canvas id="universe"></canvas><script defer src="/js/universe.js"></script><canvas id="daylight" aria-hidden="true"></canvas><script defer src="/js/daylight.js"></script><script defer src="/js/poem-subtitle.js"></script><script defer src="/js/mouse-effect.js"></script><script defer src="/js/cursor.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><i class="fas fa-spinner fa-pulse" id="loading-status" hidden="hidden"></i><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="text-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据加载中</span></div><div class="local-search-input"><input placeholder="搜索文章" type="text"/></div><hr/><div id="local-search-results"></div><div class="ais-Pagination" id="local-search-pagination" style="display:none;"><ul class="ais-Pagination-list"></ul></div><div id="local-search-stats"></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div></body></html>
