@@ -1,0 +1,533 @@
+/* ── 看板娘 ────────────────────────────────────────────────────────────────
+   右下角一个 Live2D 小人，点开能说话。
+   她不占版面：容器整块 pointer-events: none，只有人物躯干那一小块热区可点，
+   页面照常能划、能点、能选中文字。
+   ------------------------------------------------------------------------ */
+
+/* 模型尺寸用变量，右下角按钮组的高度靠它算，两边不会对不上。
+   屏幕矮的时候整体缩一档，不然小人会占掉半个屏。 */
+:root {
+  --l2d-w: 300px;
+  --l2d-h: 430px;
+}
+
+@media (max-height: 820px) {
+  :root {
+    --l2d-w: 258px;
+    --l2d-h: 360px;
+  }
+}
+
+.l2d {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  width: var(--l2d-w);
+  height: var(--l2d-h);
+  z-index: 90;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.7s ease;
+}
+
+.l2d.is-on {
+  opacity: 1;
+}
+
+/* 模型画布 */
+.l2d-canvas {
+  position: absolute;
+  inset: 0;
+}
+
+.l2d-canvas canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.l2d.is-ready .l2d-canvas canvas {
+  opacity: 1;
+}
+
+/* 模型到位前先摆一张静态图。moc3 有 15.7 MB，慢网下要下二十几秒，
+   右下角不能空着。这张图是拿同一个模型、同一套排版渲染出来的，切换时不会跳。 */
+.l2d-preview {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  object-position: bottom center;
+  transition: opacity 0.5s ease;
+}
+
+.l2d.is-ready .l2d-preview {
+  opacity: 0;
+}
+
+/* 加载条：拿不到真实进度，就让它来回走，表示“在动” */
+.l2d-bar {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  width: 72px;
+  height: 3px;
+  margin-left: -36px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.42);
+  box-shadow: 0 0 0 1px rgba(24, 34, 54, 0.14), 0 1px 4px rgba(24, 34, 54, 0.18);
+  overflow: hidden;
+}
+
+.l2d-bar i {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 38%;
+  height: 100%;
+  border-radius: 2px;
+  background: #4f83d8;
+  animation: l2d-bar-run 1.15s ease-in-out infinite;
+}
+
+@keyframes l2d-bar-run {
+  0%   { transform: translateX(-105%); }
+  100% { transform: translateX(268%); }
+}
+
+.l2d.is-ready .l2d-bar {
+  display: none;
+}
+
+/* 点击热区：只盖住人物躯干，不是整块画布。
+   盖满会挡住页面右下角的内容，盖太小又不好点。 */
+.l2d-hit {
+  position: absolute;
+  left: 50%;
+  bottom: 0;
+  width: 150px;
+  height: calc(100% - 96px);
+  transform: translateX(-50%);
+  pointer-events: auto;
+  /* 触摸时不要把拖动手势交给页面滚动 */
+  touch-action: none;
+  cursor: grab;
+  border-radius: 60px 60px 0 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 头顶热区：摸头。身体热区从脖子往下，头顶这一段它盖不到，得单开一块。
+   人物铺满整个画布高度（layout 里 scale = h*0.99 / 原高），所以从 top:0 起。 */
+.l2d-head {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 104px;
+  height: 96px;
+  transform: translateX(-50%);
+  pointer-events: auto;
+  /* 触摸时不要把拖动手势交给页面滚动 */
+  touch-action: none;
+  cursor: grab;
+  border-radius: 52px 52px 34px 34px;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 站点在 effects.css 里用 html [role="button"] 给所有按钮角色套了笔尖光标
+   （带 !important），两块热区正好都带 role="button"，会被盖掉。
+   这里用更高的特异性加回可拖动的暗示：平时张开手，拖的时候握住。 */
+.l2d .l2d-hit,
+.l2d .l2d-head {
+  cursor: grab !important;
+}
+
+.l2d.is-dragging .l2d-hit,
+.l2d.is-dragging .l2d-head {
+  cursor: grabbing !important;
+}
+
+.l2d-hit:focus-visible {
+  outline: 2px solid var(--btn-bg, #49b1f5);
+  outline-offset: -4px;
+}
+
+/* 气泡：fixed 定位，跟容器尺寸解耦，这样换视口大小不用重算 */
+/* 对话框：一朵小云，停在头顶正上方。
+
+   形状不是一个圆角矩形，是「主体 + 两个鼓包 + 一串递减的小圆尾巴」
+   拼出来的。拼接处的投影不能用 box-shadow——每个形状各投一份，
+   接缝上会叠出脏边；必须用 filter: drop-shadow，它按合并后的轮廓
+   算阴影，看上去才是一整朵云。
+
+   结构上分两层：.l2d-cloud 只管形状和投影，.l2d-inner 放内容。
+   不能把 filter 加在整个气泡上——那会把文字一起光栅化，13px 的
+   字会发虚。 */
+.l2d-bubble {
+  /* 相对 .l2d 定位，而不是相对视口。
+     走动时 .l2d 带 transform，带 transform 的祖先会成为 fixed 子元素的
+     包含块——用 fixed 的话气泡会突然跳到另一个坐标系里去。
+     absolute 反而正好：容器走，气泡跟着走，一步不用额外算。 */
+  position: absolute;
+  z-index: 2;
+  /* 人物铺满整个画布高度、底边贴底，所以画布顶部距屏幕底正好是 --l2d-h。
+     再往上抬 10px，让尾巴尖刚好搭在头顶，不压住头发。 */
+  right: calc(var(--l2d-w) * 0.5);
+  bottom: calc(var(--l2d-h) + 10px);
+  width: 240px;
+  max-width: calc(100vw - 40px);
+  pointer-events: auto;
+
+  /* 从尾巴那一点长出来，像从头顶冒出来的 */
+  transform-origin: calc(100% - 20px) 100%;
+  opacity: 0;
+  transform: translate(4px, 16px) scale(0.42);
+  transition: opacity 0.14s ease, transform 0.18s ease;
+}
+
+.l2d-bubble.is-open {
+  opacity: 1;
+  transform: none;
+  /* 回弹：冲过头一点再落定，才有「冒」的感觉 */
+  transition: opacity 0.2s ease, transform 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.l2d-bubble[hidden] {
+  display: none;
+}
+
+/* 云层：形状、颜色、投影都在这一层 */
+.l2d-cloud {
+  --cloud-bg: #ffffff;
+
+  position: absolute;
+  inset: 0;
+  border-radius: 34px;
+  background: var(--cloud-bg);
+  filter: drop-shadow(0 8px 20px rgba(28, 42, 64, 0.13))
+          drop-shadow(0 1px 3px rgba(28, 42, 64, 0.07));
+}
+
+/* 顶部四个鼓包，首尾相压。
+
+   只放三个时，鼓包之间的顶边会露出一段直线——那就是「平顶」。
+   圆的宽度得够到相邻那个的起点，顶边才完全由弧线组成。
+
+   位置和大小都用百分比，lift 也用百分比：鼓包是正方形
+   （aspect-ratio: 1），translateY 的百分比就是相对自身高度，
+   于是宽屏窄屏下形状一致，不会因为气泡变宽而变扁。 */
+.l2d-cloud i,
+.l2d-cloud::before,
+.l2d-cloud::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--cloud-bg);
+  transform: translateY(var(--lift, -20%));
+}
+
+/* 四个鼓包的位置是按「弦宽」排的：一个圆在顶边上的可见宽度是
+   2w·√(k−k²)（w 是直径，k 是露出高度占直径的比例）。
+   相邻两个的弦要相压，顶边才没有直线段。 */
+.l2d-cloud i:nth-of-type(1) {
+  left: -2%;
+  width: 31%;
+  --lift: -16%;
+}
+
+.l2d-cloud i:nth-of-type(2) {
+  left: 19%;
+  width: 34%;
+  --lift: -23%;
+}
+
+.l2d-cloud::before {
+  left: 42%;
+  width: 35%;
+  --lift: -26%;
+}
+
+.l2d-cloud::after {
+  left: 66%;
+  width: 32%;
+  --lift: -19%;
+}
+
+/* 尾巴：两个递减的小圆从右下角往下飘，指向头顶。
+   用圆而不是尖角，因为尖角像漫画对白，圆才像「冒出来的云」。 */
+.l2d-tail {
+  position: absolute;
+  right: 12px;
+  bottom: -12px;
+  width: 19px;
+  height: 19px;
+  border-radius: 50%;
+  background: var(--cloud-bg);
+}
+
+.l2d-tail::after {
+  content: '';
+  position: absolute;
+  right: 2px;
+  bottom: -14px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--cloud-bg);
+}
+
+/* 内容层：不参与滤镜，文字按正常方式渲染 */
+.l2d-inner {
+  position: relative;
+  padding: 13px 16px 11px;
+}
+
+.l2d-text {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.75;
+  color: #22303f;
+  word-break: break-word;
+  max-height: 168px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.l2d-text:empty::before {
+  content: '…';
+  color: #9aa6b6;
+}
+
+/* 打字中的光标 */
+.l2d-text.is-typing::after {
+  content: '';
+  display: inline-block;
+  width: 2px;
+  height: 0.95em;
+  margin-left: 2px;
+  vertical-align: -0.12em;
+  background: currentColor;
+  opacity: 0.5;
+  animation: l2d-caret 1s steps(2, start) infinite;
+}
+
+@keyframes l2d-caret {
+  to { visibility: hidden; }
+}
+
+/* 输入行 */
+.l2d-form {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid rgba(30, 44, 66, 0.08);
+}
+
+/* 输入框做成胶囊、去边框。方框子在圆润的云朵里太硬，
+   一块淡底就够，眼睛不会先看到它。 */
+.l2d-input {
+  flex: 1 1 auto;
+  min-width: 0;
+  padding: 5px 11px;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(30, 44, 66, 0.055);
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: #22303f;
+  outline: none;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.l2d-input::placeholder {
+  color: #98a4b4;
+}
+
+.l2d-input:focus {
+  background: rgba(30, 44, 66, 0.08);
+  box-shadow: 0 0 0 2px rgba(73, 177, 245, 0.22);
+}
+
+.l2d-send {
+  flex: 0 0 auto;
+  width: 27px;
+  height: 27px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: var(--btn-bg, #49b1f5);
+  color: #fff;
+  font-size: 15px;
+  line-height: 1;
+  cursor: pointer;
+  transition: filter 0.2s ease, transform 0.15s ease;
+}
+
+.l2d-send:hover { filter: brightness(1.08); }
+.l2d-send:active { transform: scale(0.94); }
+.l2d-send:disabled { opacity: 0.45; cursor: default; transform: none; }
+
+/* 收起时的入口：一个很小的圆点，不打扰 */
+.l2d-trigger {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 0 4px 16px rgba(30, 44, 66, 0.18);
+  color: var(--btn-bg, #49b1f5);
+  font-size: 15px;
+  cursor: pointer;
+  pointer-events: auto;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.l2d-trigger:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(30, 44, 66, 0.24);
+}
+
+/* display: flex 会盖掉 [hidden] 的 display: none，必须显式写一条 */
+.l2d-trigger[hidden] {
+  display: none;
+}
+
+/* ── 深色 ─────────────────────────────────────────────────────────────── */
+
+html[data-theme="dark"] .l2d-cloud,
+.dark .l2d-cloud {
+  --cloud-bg: #3a4557;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.5))
+          drop-shadow(0 0 0 1px rgba(255, 255, 255, 0.06));
+}
+
+html[data-theme="dark"] .l2d-text,
+.dark .l2d-text {
+  color: #e6ebf5;
+}
+
+html[data-theme="dark"] .l2d-form,
+.dark .l2d-form {
+  border-top-color: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .l2d-input,
+.dark .l2d-input {
+  background: rgba(255, 255, 255, 0.07);
+  color: #e6ebf5;
+}
+
+html[data-theme="dark"] .l2d-input:focus,
+.dark .l2d-input:focus {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+html[data-theme="dark"] .l2d-input::placeholder,
+.dark .l2d-input::placeholder {
+  color: #7c8aa3;
+}
+
+html[data-theme="dark"] .l2d-trigger,
+.dark .l2d-trigger {
+  background: rgba(38, 46, 60, 0.94);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+/* ── 给小人让位 ────────────────────────────────────────────────────────── */
+
+/* 右下角那排悬浮按钮（回到顶部、夜间模式）原来贴着底边，
+   小人加载后整体上移，不然按钮会浮在她脸上。只在加载后生效，
+   没加载时页面保持原样。 */
+body.l2d-on #rightside {
+  bottom: calc(var(--l2d-h) + 16px);
+  transition: bottom 0.4s ease;
+}
+
+/* ── 移动端 ───────────────────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  :root {
+    --l2d-w: 200px;
+    --l2d-h: 280px;
+  }
+
+  .l2d-hit {
+    width: 112px;
+    height: calc(100% - 72px);
+  }
+
+  .l2d-head {
+    width: 76px;
+    height: 72px;
+    border-radius: 38px 38px 26px 26px;
+  }
+
+  /* 手机上没地方把云朵放旁边，改放到头顶正上方，尾巴仍朝下 */
+  .l2d-bubble {
+    right: 14px;
+    bottom: calc(var(--l2d-h) + 8px);
+    width: calc(100vw - 28px);
+    max-width: 320px;
+    transform-origin: calc(100% - 70px) 100%;
+  }
+
+  .l2d-cloud {
+    border-radius: 22px;
+  }
+
+  .l2d-inner {
+    padding: 13px 15px 11px;
+  }
+
+  .l2d-tail {
+    right: 70px;
+    bottom: -14px;
+    width: 17px;
+    height: 17px;
+  }
+
+  .l2d-tail::after {
+    right: 2px;
+    bottom: -12px;
+    width: 9px;
+    height: 9px;
+  }
+
+  .l2d-text {
+    max-height: 132px;
+    font-size: 13px;
+  }
+
+  body.l2d-on #rightside {
+    bottom: calc(var(--l2d-h) + 12px);
+  }
+}
+
+/* ── 减少动态效果 ─────────────────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .l2d,
+  .l2d-bubble,
+  .l2d-trigger,
+  .l2d-send {
+    transition: none;
+  }
+
+  .l2d-text.is-typing::after {
+    animation: none;
+  }
+}
