@@ -1,0 +1,50 @@
+/* 背景音按钮：长在右侧工具栏里，跟着主题按钮走，不另起一块浮层。 */
+#rightside .noise-btn {
+  position: relative;
+}
+
+#rightside .noise-btn svg {
+  display: inline-block;
+  width: 18px;
+  height: 18px;
+  vertical-align: middle;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 开了就在角上点一颗小灯，不抢图标本身。 */
+#rightside .noise-btn.is-on::after {
+  content: '';
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #8fd3c4;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.2);
+}
+
+#rightside .noise-btn.is-on svg {
+  animation: noise-breathe 2.4s ease-in-out infinite;
+}
+
+@keyframes noise-breathe {
+  0%, 100% { opacity: 0.72; }
+  50% { opacity: 1; }
+}
+
+html[data-theme="dark"] #rightside .noise-btn.is-on::after,
+.dark #rightside .noise-btn.is-on::after {
+  background: #9fe0d0;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.26);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #rightside .noise-btn.is-on svg {
+    animation: none;
+  }
+}
